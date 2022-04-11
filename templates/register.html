@@ -1,0 +1,34 @@
+
+<div class="container">
+
+    <form class="well form-horizontal" action=" " method="post"  id="contact_form">
+<fieldset>
+
+<!-- Form Name -->
+<legend><center><h2><b>Registration Form</b></h2></center></legend><br>
+
+<form method="post">
+    {% csrf_token %} 
+    {% for field in NewUserForm %}
+
+        <p>
+
+            {% csrf_token %}
+
+
+            {{field.label_tag}}
+            {{field}}
+
+
+
+
+        </p>
+
+    {% endfor %}
+
+    {{register_form}}
+    <br>
+    <input type="submit" value ="Register"/> 
+  </form>
+
+

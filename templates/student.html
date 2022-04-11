@@ -1,0 +1,23 @@
+
+<form method="post">
+    {% csrf_token %} 
+    {% for field in StudentForm %}
+    <p>
+        {% csrf_token %}
+            {{field.label_tag}}
+            {{field}}
+    </p>
+   {% endfor %}
+    {{student_form}}
+    <br>
+    <input type="submit" value ="Submit"/> 
+ </form>
+<br>
+<br>
+
+
+
+
+ <li><a href="logout">Logout</a></li>
+
+ 
