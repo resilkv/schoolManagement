@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from.models import Mark,Subject
+from.models import Mark,Subject,Grade,Student,Teacher
 from .models import CustomUser
 
 
@@ -44,16 +44,23 @@ class NewUserForm(UserCreationForm):
         user = super(NewUserForm, self).save(commit=False)
         user.email = self.cleaned_data['email']
         user.category=self.cleaned_data['category']
+          
         if commit:
             user.save()
         return user
 
 class StudentForm(forms.ModelForm):
     
-
+    widget = forms.TextInput(attrs={'placeholder': 'Name', 'style': 'width: 300px;', 'class': 'form-control'})
     class Meta:
         model = Mark
-        fields = '__all__'
+        fields = '__all__'  
+        
+
+    def __init__(self, *args, **kwargs):
+        super(StudentForm, self).__init__(*args, **kwargs)
+        self.fields['user'].queryset = CustomUser.objects.filter(category='student')
+    
 
 
 class StudentDetailsForm(forms.ModelForm):
@@ -63,6 +70,23 @@ class StudentDetailsForm(forms.ModelForm):
         model = Mark
         fields = ('user',)
 
+    def __init__(self, *args, **kwargs):
+        super(StudentDetailsForm, self).__init__(*args, **kwargs)
+        self.fields['user'].queryset = CustomUser.objects.filter(category='student')    
 
+class StudentField(forms.ModelForm):
+    class Meta:
+        model = Student
+        fields = '__all__'
+
+
+class TeacherField(forms.ModelForm):
+    class Meta:
+        model = Teacher
+        fields = '__all__'        
+    
+
+
+    
   
 

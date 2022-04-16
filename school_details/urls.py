@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-# from school_details.views import StudentData
+
 
 app_name = "school_details"   
 
@@ -16,7 +16,9 @@ urlpatterns = [
     path('student/logout/',views.logout_user,name='logout'),
     path('student_data/',views.student_data,name='student_data'),
     path('indi_data/',views.indi_data,name='indi_data'),
-    path('complete_data/<int:pk>/', views.complete_data, name='complete_data'),
+    path('complete_data/<int:id>/', views.complete_data, name='complete_data'),
+    path('Student_field/',views.Student_field, name='Student_field'),
+    path('teacher_field/',views.teacher_field, name='teacher_field'),
 ]
 
 

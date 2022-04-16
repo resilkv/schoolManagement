@@ -1,12 +1,13 @@
 from django.shortcuts import  render, redirect,HttpResponse
-from .forms import NewUserForm,StudentForm,StudentDetailsForm
+from .forms import NewUserForm,StudentForm,StudentDetailsForm,StudentField,TeacherField
 from django.contrib.auth import login,authenticate,logout
 from django.contrib import messages
-from .models import CustomUser,Mark
+from .models import CustomUser,Mark,Grade,Student,Teacher
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import permission_required,user_passes_test
 from django.views.generic.list import ListView
 from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponseForbidden
 
 
 
@@ -19,10 +20,17 @@ def register_request(request):
         form = NewUserForm(request.POST)
         # import pdb;pdb.set_trace()
         if form.is_valid():
+
             user = form.save()
-            login(request, user)
+            
             messages.success(request, "Registration successful." )
-            return redirect("/")
+
+            if user.category=='student':
+                form=StudentField
+                return redirect("/Student_field")
+            else:
+                return redirect('/teacher_field')   
+            login(request, user)    
         messages.error(request, "Unsuccessful registration. Invalid information.")
     form = NewUserForm()
 
@@ -31,6 +39,8 @@ def register_request(request):
 
 
 def home(request):
+    if request.user.is_authenticated:
+        return render(request,'user_home.html')
     return render(request,'home.html')
 
 
@@ -54,6 +64,8 @@ def student_details(request):
             studet=form.save()
             # return redirect('')
 
+
+
     form = StudentForm()
     
 
@@ -61,7 +73,10 @@ def student_details(request):
     return render(request, 'student.html', context={'student_form':form} )  
 
 
+
+
 def login_user (request):
+   
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
@@ -70,13 +85,16 @@ def login_user (request):
         if user is not None:
             login(request, user)
             # import pdb;pdb.set_trace()
+            
             if user.category=='Teacher':
 
                 return redirect('/student') 
+
                 
                                                  
             else:
-                return redirect('/')    
+                pk=user.id
+                return redirect('/complete_data/{}'.format(pk))    
         else:
             messages.success(request,('Error logging in'))
             return redirect('login')
@@ -108,38 +126,65 @@ def indi_data(request):
             # data=form.cleaned_data.get('user')
             # data=Mark.objects.get(pk=request.user)
 
-            # data.save()
-            # data= form.cleaned_data.get("user")
-            # data= form.cleaned_data.get("id")
-
-            # data = request.GET['id_user']
-            # id_user= form.cleaned_data['id_user']
-            # print(data)
+            
      
             # form.save()
             user= form.cleaned_data['user']
-            # data = form.cleaned_data.get('id_user',None)
-            # queryset=queryset.filter(user=user)
-            # data=Mark.objects.filter(queryset)
-            pk=user.id
-
             
-            return redirect('/complete_data/{}'.format(pk))
+            id=user.id
+                    
+            return redirect('/complete_data/{}'.format(id))
 
             
 
-    # form = StudentDetailsForm
+    
     
     return render(request, 'indi_data.html', context={'student_details':form})        
 
-def complete_data(request,pk):
+def complete_data(request,id):
     
-    # import pdb;pdb.set_trace()
-    data = Mark.objects.filter(pk=pk)
-    # user = get_object_or_404(user, pk=id_user)
+
+    user = CustomUser.objects.get(id=id)
+    data = Mark.objects.filter(user=user)
+    if id != request.user.id and request.user.category != 'Teacher':
+        return HttpResponse('You cannot view what is not yours')
+
+
+    
+   
     return render(request, 'complete_data.html', {'user': data})
 
 
-            
+def Student_field(request):
 
+    form=StudentField
+    if request.method=='POST':
+        form = StudentField(request.POST or None)
+        if form.is_valid():
+            data=form.save(commit=False)
+            return redirect("/")
+
+        
+        form = StudentField()
+    
+
+    
+    return render(request, 'student_field.html', context={'student_field':form} )    
+
+def teacher_field(request):
+
+    form=TeacherField
+    if request.method=='POST':
+        form = TeacherField(request.POST or None)
+        if form.is_valid():
+            data=form.save(commit=False)
+            return redirect("/")
+
+        
+        form = StudentField()
+    
+
+    
+    return render(request, 'teacher_field.html', context={'teacher_field':form} )    
+    
 

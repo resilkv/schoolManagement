@@ -8,12 +8,40 @@
 <body>
 <html>
 {% block body %}
+<style>
+body {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     margin: 0 auto;
+     height: 100vh; 
+     background-color: #f1f1f1;
+   }
 
+input {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     margin: 0 auto;
+   }
 
-<form role="form" action="" method="post" >
+label {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     margin: 0 auto;
+   }
+
+select {
+     margin-bottom: 10px;
+     margin-top: 10px;
+   }
+
+</style>
+<form role="form" action="#" method="post" >
     {% csrf_token %} 
 
-    {{StudentDetailsForm}}
+    
     {% for field in student_details %}
 
     
@@ -38,6 +66,12 @@
 
     <input type="submit" value ="Search for details" /> 
 
+
+    <br>
+    <br>
+    <br>
+    <a href="/student_data" class="w3-bar-item w3-button">For details of all Students</a>
+
     
 
 
@@ -45,3 +79,4 @@
 {% endblock %}
 </body>
 </html>
+
