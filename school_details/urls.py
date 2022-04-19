@@ -17,6 +17,7 @@ urlpatterns = [
     path('complete_data/<int:id>/', views.complete_data, name='complete_data'),
     path('Student_field/',views.Student_field, name='Student_field'),
     path('teacher_field/',views.teacher_field, name='teacher_field'),
+    path('success',views.success,name='success'),
 ]
 
 

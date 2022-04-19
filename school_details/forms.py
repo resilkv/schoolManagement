@@ -78,6 +78,8 @@ class StudentField(forms.ModelForm):
     class Meta:
         model = Student
         fields = '__all__'
+        grade = forms.ModelMultipleChoiceField(queryset=Grade.objects, widget=forms.CheckboxSelectMultiple(), required=False)
+
 
 
 
@@ -85,10 +87,7 @@ class TeacherField(forms.ModelForm):
     class Meta:
         model = Teacher
         fields = '__all__'
-        widgets = {
-            'my_date': DateInput(attrs={'type': 'date'})
-        }
-        
+        grade = forms.ModelMultipleChoiceField(queryset=Grade.objects, widget=forms.CheckboxSelectMultiple(), required=False)
                 
 
     

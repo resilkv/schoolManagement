@@ -145,7 +145,7 @@ def complete_data(request,id):
     # import pdb;pdb.set_trace() 
     user = CustomUser.objects.get(id=id)
     data = Mark.objects.filter(user=user)
-    if id != request.user.id and request.user.category != 'Teacher':
+    if id != request.user.id and request.user.category != 'teacher':
         return HttpResponse('You cannot view what is not yours')
 
 
@@ -161,7 +161,8 @@ def Student_field(request):
         form = StudentField(request.POST or None)
         if form.is_valid():
             data=form.save(commit=False)
-            return redirect("/")
+            data.save()
+            return redirect("/success")
 
         
         form = StudentField()
@@ -175,15 +176,24 @@ def teacher_field(request):
     form=TeacherField
     if request.method=='POST':
         form = TeacherField(request.POST or None)
+        # import pdb;pdb.set_trace()
         if form.is_valid():
-            import pdb;pdb.set_trace()
             data=form.save(commit=False)
-            return redirect("/")
+            print('success')
+            data.save()
+            return redirect("/success")
+
+        else:
+            print(form.errors)    
 
         
     
         form=TeacherField()    
     
-    return render(request, 'teacher_field.html', context={'teacher_field':form} )    
+    return render(request, 'teacher_field.html', context={'teacher_field':form} )  
+
+
+def success(request):
+    return render(request,'success.html',{})      
     
 

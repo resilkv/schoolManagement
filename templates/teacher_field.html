@@ -1,6 +1,26 @@
-<form method="post">
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title></title>
+</head>
+<body>
+	<form class="review-form" action="." method="post">
+
 	{% csrf_token %}
-	{{teacher_field}}
+	Date of Birth : {{teacher_field.dob}}  <br><br>
+	Teaching in : {{teacher_field.teaching_in}}  <br><br> 
+	Address{{teacher_field.address}}  <br>
+	{{form.errors}}
 
 	<button class="btn btn-success btn-sm float-right submit_btn"><i class="fas fa-arrow-alt-circle-right"></i>Submit</button>
   </form>
+  
+
+</body>
+</html>
+
+
+

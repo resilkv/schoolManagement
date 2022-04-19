@@ -60,10 +60,20 @@ class Student(models.Model):
 	grade=models.OneToOneField('Grade',on_delete=models.CASCADE)
 
 
+	def __str__(self):
+		return self.guardian
+
+
+
+
 class Teacher(models.Model):
 	address=models.TextField(max_length=200)
-	teaching_in=models.ForeignKey('Grade',on_delete=models.CASCADE)
+	# teaching_in=models.ForeignKey('Grade',on_delete=models.CASCADE)
+	teaching_in=models.ManyToManyField(Grade)
 	dob=models.DateField()
+
+	def __str__(self):
+		return self.address
 
 
 
