@@ -76,7 +76,7 @@ class Teacher(models.Model):
 		return self.address
 
 
-
+		
 
 
 	

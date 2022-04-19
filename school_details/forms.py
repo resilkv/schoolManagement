@@ -1,4 +1,5 @@
 from django import forms
+from django.forms import ModelForm
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from.models import Mark,Subject,Grade,Student,Teacher
@@ -72,13 +73,19 @@ class StudentDetailsForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(StudentDetailsForm, self).__init__(*args, **kwargs)
-        self.fields['user'].queryset = CustomUser.objects.filter(category='student')    
+        self.fields['user'].queryset = CustomUser.objects.filter(category='student')  
+
+class DateInput(forms.DateInput):
+    input_type = 'date'
+
 
 class StudentField(forms.ModelForm):
     class Meta:
         model = Student
         fields = '__all__'
-        grade = forms.ModelMultipleChoiceField(queryset=Grade.objects, widget=forms.CheckboxSelectMultiple(), required=False)
+        widgets = {
+            'dob': DateInput(),
+        }
 
 
 
@@ -88,7 +95,10 @@ class TeacherField(forms.ModelForm):
         model = Teacher
         fields = '__all__'
         grade = forms.ModelMultipleChoiceField(queryset=Grade.objects, widget=forms.CheckboxSelectMultiple(), required=False)
-                
+        widgets = {
+            'dob': DateInput(),
+        }
+      
 
     
 
