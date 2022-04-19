@@ -22,6 +22,8 @@ INSTALLED_APPS = [
     
 ]
 
+DATE_INPUT_FORMATS = ['%d-%m-%Y']
+
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4' 
 

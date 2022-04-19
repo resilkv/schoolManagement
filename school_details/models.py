@@ -2,7 +2,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 import datetime
-
+from django.conf import settings
 
 
 CATEGORY_CHOICES = (
@@ -64,6 +64,7 @@ class Teacher(models.Model):
 	address=models.TextField(max_length=200)
 	teaching_in=models.ForeignKey('Grade',on_delete=models.CASCADE)
 	dob=models.DateField()
+
 
 
 

@@ -46,13 +46,12 @@ def home(request):
 
 def check_role_user(login_user):
     # import pdb;pdb.set_trace()   
-    if login_user.is_authenticated and (login_user.category=='Teacher' or login_user.is_superuser):
+    if login_user.is_authenticated and (login_user.category=='teacher' or login_user.is_superuser):
         return True
     else:
         return False 
 
-
-
+ 
 @login_required(login_url=None)
 @user_passes_test(check_role_user,login_url='/')
 def student_details(request):
@@ -86,7 +85,7 @@ def login_user (request):
             login(request, user)
             # import pdb;pdb.set_trace()
             
-            if user.category=='Teacher':
+            if user.category=='teacher':
 
                 return redirect('/student') 
 
@@ -143,7 +142,7 @@ def indi_data(request):
 
 def complete_data(request,id):
     
-
+    # import pdb;pdb.set_trace() 
     user = CustomUser.objects.get(id=id)
     data = Mark.objects.filter(user=user)
     if id != request.user.id and request.user.category != 'Teacher':
@@ -177,13 +176,13 @@ def teacher_field(request):
     if request.method=='POST':
         form = TeacherField(request.POST or None)
         if form.is_valid():
+            import pdb;pdb.set_trace()
             data=form.save(commit=False)
             return redirect("/")
 
         
-        form = StudentField()
     
-
+        form=TeacherField()    
     
     return render(request, 'teacher_field.html', context={'teacher_field':form} )    
     

@@ -3,7 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from.models import Mark,Subject,Grade,Student,Teacher
 from .models import CustomUser
-
+from django.forms.widgets import DateInput
 
 
 
@@ -80,10 +80,17 @@ class StudentField(forms.ModelForm):
         fields = '__all__'
 
 
+
 class TeacherField(forms.ModelForm):
     class Meta:
         model = Teacher
-        fields = '__all__'        
+        fields = '__all__'
+        widgets = {
+            'my_date': DateInput(attrs={'type': 'date'})
+        }
+        
+                
+
     
 
 
