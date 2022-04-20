@@ -1,5 +1,5 @@
 from django.shortcuts import  render, redirect,HttpResponse
-from .forms import NewUserForm,StudentForm,StudentDetailsForm,StudentField,TeacherField
+from .forms import NewUserForm,StudentForm,StudentDetailsForm,StudentForm,TeacherForm
 from django.contrib.auth import login,authenticate,logout
 from django.contrib import messages
 from .models import CustomUser,Mark,Grade,Student,Teacher
@@ -156,44 +156,49 @@ def complete_data(request,id):
 
 def Student_field(request):
 
-    form=StudentField
+    form=StudentForm
     if request.method=='POST':
-        form = StudentField(request.POST or None)
+        form = StudentForm(request.POST or None)
         if form.is_valid():
             data=form.save(commit=False)
             data.save()
             return redirect("/success")
 
         
-        form = StudentField()
+        form = StudentForm()
     
 
     
     return render(request, 'student_field.html', context={'student_field':form} )    
 
 def teacher_field(request):
-
-    form=TeacherField
+    # import pdb;pdb.set_trace()
+    form=TeacherForm
+    # grade=GradeField
     if request.method=='POST':
-        form = TeacherField(request.POST or None)
+        form = TeacherForm(request.POST or None)
+        # grade=GradeField(request.POST or None)
         # import pdb;pdb.set_trace()
         if form.is_valid():
+
             data=form.save(commit=False)
+            # form=grade.save(commit=False)
             print('success')
             data.save()
+            # form.save()
             return redirect("/success")
 
         else:
             print(form.errors)    
 
         
-    
-        form=TeacherField()    
+        # grade=GradeField()
+        form=TeacherForm()
+            
     
     return render(request, 'teacher_field.html', context={'teacher_field':form} )  
 
 
 def success(request):
     return render(request,'success.html',{})      
-    
 

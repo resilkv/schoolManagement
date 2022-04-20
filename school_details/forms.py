@@ -3,7 +3,7 @@ from django.forms import ModelForm
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from.models import Mark,Subject,Grade,Student,Teacher
-from .models import CustomUser
+from .models import CustomUser,GRADE
 from django.forms.widgets import DateInput
 
 
@@ -79,7 +79,7 @@ class DateInput(forms.DateInput):
     input_type = 'date'
 
 
-class StudentField(forms.ModelForm):
+class StudentForm(forms.ModelForm):
     class Meta:
         model = Student
         fields = '__all__'
@@ -90,17 +90,19 @@ class StudentField(forms.ModelForm):
 
 
 
-class TeacherField(forms.ModelForm):
+class TeacherForm(forms.ModelForm):
+    
+    grade = forms.MultipleChoiceField(choices=GRADE, widget=forms.CheckboxSelectMultiple)
+    # grade=forms.ModelMultipleChoiceField(choices=GRADE)
+    
     class Meta:
         model = Teacher
-        fields = '__all__'
-        grade = forms.ModelMultipleChoiceField(queryset=Grade.objects, widget=forms.CheckboxSelectMultiple(), required=False)
+        fields = ('dob','address',)
         widgets = {
             'dob': DateInput(),
         }
       
 
-    
 
 
     

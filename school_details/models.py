@@ -41,17 +41,9 @@ class Mark(models.Model):
 	def __str__(self):
 		return self.user.__str__() 
 
-GRADE= (
-	(5,'5'),
-	(6,'6'),
-	(7,'7'))
 
-class Grade(models.Model):
 
-	grade=models.IntegerField(choices=GRADE,default='5')
-
-	def __str__(self):
-		return self.grade.__str__()		
+		
 
 class Student(models.Model):
 	guardian=models.CharField(max_length=50)
@@ -68,15 +60,28 @@ class Student(models.Model):
 
 class Teacher(models.Model):
 	address=models.TextField(max_length=200)
-	# teaching_in=models.ForeignKey('Grade',on_delete=models.CASCADE)
-	teaching_in=models.ManyToManyField(Grade)
+	
 	dob=models.DateField()
 
 	def __str__(self):
-		return self.address
+		return self.address	
+
+GRADE= (
+	(5,'5'),
+	(6,'6'),
+	(7,'7'))
+
+class Grade(models.Model):
+
+	grade=models.IntegerField(choices=GRADE,default='5')
+	# teacher=models.ManyToManyField(Teacher)
+	teacher=models.ForeignKey('Teacher',on_delete=models.CASCADE)
+	# student=models.ForeignKey('Student',on_delete=models.CASCADE)
 
 
-		
+	def __str__(self):
+		return self.grade.__str__()
+
 
 
 	
