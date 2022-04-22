@@ -155,7 +155,10 @@ def complete_data(request,id):
 
 def edit(request,id):
     # import pdb;pdb.set_trace()
-    # user=CustomUser.objects.get(id=id)
+
+    if id != request.user.id and request.user.category != 'teacher':
+        return HttpResponse('You cannot edit the marks')
+    user=CustomUser.objects.get(id=id)
 
     data=Mark.objects.get(id=id)
 
