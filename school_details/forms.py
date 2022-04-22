@@ -56,12 +56,20 @@ class StudentForm(forms.ModelForm):
     class Meta:
         model = Mark
         fields = '__all__'  
+        exclude = ('date_submit',)
         
 
     def __init__(self, *args, **kwargs):
         super(StudentForm, self).__init__(*args, **kwargs)
         self.fields['user'].queryset = CustomUser.objects.filter(category='student')
     
+    def __init__(self, *args, **kwargs):
+       super(StudentForm,self).__init__(*args, **kwargs)
+       attrs={'class':'form-control','required': True}
+       if self.instance and self.instance.pk:
+            self.fields.pop('user', None)
+       for field in self.fields.values():
+           field.widget.attrs = attrs
 
 
 class StudentDetailsForm(forms.ModelForm):
@@ -70,6 +78,7 @@ class StudentDetailsForm(forms.ModelForm):
     class Meta:
         model = Mark
         fields = ('user',)
+        exclude = ('date_submit',)
 
     def __init__(self, *args, **kwargs):
         super(StudentDetailsForm, self).__init__(*args, **kwargs)
@@ -79,7 +88,7 @@ class DateInput(forms.DateInput):
     input_type = 'date'
 
 
-class StudentForm(forms.ModelForm):
+class StudentFieldForm(forms.ModelForm):
     class Meta:
         model = Student
         fields = '__all__'

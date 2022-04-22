@@ -1,5 +1,5 @@
 from django.shortcuts import  render, redirect,HttpResponse
-from .forms import NewUserForm,StudentForm,StudentDetailsForm,StudentForm,TeacherForm
+from .forms import NewUserForm,StudentForm,StudentDetailsForm,StudentFieldForm,TeacherForm
 from django.contrib.auth import login,authenticate,logout
 from django.contrib import messages
 from .models import CustomUser,Mark,Grade,Student,Teacher
@@ -26,7 +26,7 @@ def register_request(request):
             messages.success(request, "Registration successful." )
 
             if user.category=='student':
-                form=StudentField
+                
                 return redirect("/Student_field")
             else:
                 return redirect('/teacher_field')   
@@ -58,18 +58,22 @@ def student_details(request):
     form=StudentForm
     # import pdb;pdb.set_trace()   
     if request.method == 'POST':
+        import pdb;pdb.set_trace() 
         form = StudentForm(request.POST)  
         if form.is_valid():     
-            studet=form.save()
+            student=form.save()
             # return redirect('')
+
+
 
 
 
     form = StudentForm()
     
-
+    
     
     return render(request, 'student.html', context={'student_form':form} )  
+
 
 
 
@@ -122,12 +126,8 @@ def indi_data(request):
         if form.is_valid():
             # import pdb;pdb.set_trace()
             data=form.save(commit=False)
-            # data=form.cleaned_data.get('user')
-            # data=Mark.objects.get(pk=request.user)
-
-            
+                   
      
-            # form.save()
             user= form.cleaned_data['user']
             
             id=user.id
@@ -148,10 +148,27 @@ def complete_data(request,id):
     if id != request.user.id and request.user.category != 'teacher':
         return HttpResponse('You cannot view what is not yours')
 
+    
+    return render(request, 'complete_data.html', {'mark': data,'user':user})
+
+
+
+def edit(request,id):
+    # import pdb;pdb.set_trace()
+    # user=CustomUser.objects.get(id=id)
+
+    data=Mark.objects.get(id=id)
 
     
-   
-    return render(request, 'complete_data.html', {'user': data})
+    form=StudentForm(request.POST or None,instance=data)
+    
+    if form.is_valid():
+     
+        form.save()
+        return redirect('/')
+
+    return render(request, 'edit.html', {'form': form})
+
 
 
 def Student_field(request):
@@ -177,7 +194,6 @@ def teacher_field(request):
     # grade=GradeField
     if request.method=='POST':
         form = TeacherForm(request.POST or None)
-        # grade=GradeField(request.POST or None)
         # import pdb;pdb.set_trace()
         if form.is_valid():
 
@@ -192,7 +208,7 @@ def teacher_field(request):
             print(form.errors)    
 
         
-        # grade=GradeField()
+        
         form=TeacherForm()
             
     

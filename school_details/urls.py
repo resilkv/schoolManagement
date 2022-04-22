@@ -18,6 +18,8 @@ urlpatterns = [
     path('Student_field/',views.Student_field, name='Student_field'),
     path('teacher_field/',views.teacher_field, name='teacher_field'),
     path('success',views.success,name='success'),
+    path('edit/<int:id>/',views.edit,name='edit'),
+
 ]
 
 

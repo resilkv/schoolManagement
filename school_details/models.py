@@ -3,6 +3,8 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 import datetime
 from django.conf import settings
+from django.utils.timezone import now
+
 
 
 CATEGORY_CHOICES = (
@@ -17,6 +19,7 @@ CATEGORY_CHOICES = (
 class CustomUser(AbstractUser):
 	email=models.EmailField(max_length=100,unique=True)
 	category = models.CharField(max_length=50, choices=CATEGORY_CHOICES, default='Teacher')
+
 	
 	
 
@@ -36,6 +39,9 @@ class Mark(models.Model):
 	user=models.ForeignKey('CustomUser',on_delete= models.CASCADE,related_name='user_set')
 	subject=models.ForeignKey('Subject',on_delete= models.CASCADE,related_name='name_set')
 	mark=models.IntegerField()
+	date_submit=models.DateTimeField(auto_now=True, editable=False)
+
+
 
 	
 	def __str__(self):

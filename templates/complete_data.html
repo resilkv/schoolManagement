@@ -39,14 +39,14 @@ td, th {
 }
 
 {% endblock %}
-
+{% block body %}
 </style>
    
 
     <!-- add icon -->
   </head>
   <body>
-  	{% for i in user %}
+  	{% for i in mark %}
    
     	{% if forloop.first %}
       <h2>{{i.user}}</h2>
@@ -62,18 +62,37 @@ td, th {
         <tbody>
           <tr>
             <td>{{i.subject}}</td>
-            <td>{{i.mark}}</td>
+            <td>{{i.mark}} <a href="{%url 'school_details:edit' i.id %}"> Edit</a></td>
+
+            {% endfor %} 
+
+            
+
+           
+
+
+            
             
           </tr>
-          {% endfor %}     
+              
           
         </tbody>
       
 
       </table>
-      <li><a href="/student/logout">Logout</a></li>
+      <li><a href="/student/logout">Logout</a></li><br><br>
     </div>
-    <input type=button value="Previous Page" onClick="javascript:history.go(-1);">
+    <input type=button value="Previous Page" onClick="javascript:history.go(-1);"><br><br>
 
+<td>
+
+
+
+   
+
+
+{% endblock %}
+
+</td>
   </body>
-</html>
+</html>   
