@@ -66,6 +66,8 @@ p {
       <th scope="col">Subject</th>
       <th scope="row"></th>
       <th scope="col">Marks</th>
+      <th scope="row"></th>
+      <th scope="col">Result</th>
     </tr>
   </thead>
   <tbody>
@@ -83,8 +85,22 @@ p {
       <th scope="row"></th>
      
       <td>{{i.mark}}</td>
+
+      
+      
+      <th scope="row"></th>
+     
+      <td> 
+              {% if i.mark >= 50 %} 
+                  'pass'  
+              {% else %} 
+                  'fail' 
+              {% endif %} 
+              
+           </td>
     </tr>
-{% endfor %}    
+   
+    {% endfor %}
 
 {% endblock %}
   </tbody>

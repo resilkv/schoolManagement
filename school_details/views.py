@@ -58,7 +58,7 @@ def student_details(request):
     form=StudentForm
     # import pdb;pdb.set_trace()   
     if request.method == 'POST':
-        import pdb;pdb.set_trace() 
+        # import pdb;pdb.set_trace() 
         form = StudentForm(request.POST)  
         if form.is_valid():     
             student=form.save()
@@ -109,10 +109,13 @@ def logout_user(request):
     return redirect('/')
 
 def student_data(request):
+    # import pdb;pdb.set_trace()
     data = Mark.objects.all()
+    # mark=Mark.objects.values_list('mark',flat=True)
 
 
-    # data = Mark.objects.filter(pk=id)
+   
+
     return render(request,'student_data.html',{'result':data})
 
 
@@ -157,7 +160,7 @@ def edit(request,id):
     # import pdb;pdb.set_trace()
 
     if id != request.user.id and request.user.category != 'teacher':
-        return HttpResponse('You cannot edit the marks')
+        return HttpResponse('You cannot Edit the marks')
     user=CustomUser.objects.get(id=id)
 
     data=Mark.objects.get(id=id)
@@ -168,7 +171,7 @@ def edit(request,id):
     if form.is_valid():
      
         form.save()
-        return redirect('/')
+        # return redirect('/')
 
     return render(request, 'edit.html', {'form': form})
 
@@ -220,4 +223,3 @@ def teacher_field(request):
 
 def success(request):
     return render(request,'success.html',{})      
-
