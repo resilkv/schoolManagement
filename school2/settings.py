@@ -1,6 +1,9 @@
 from pathlib import Path
 import os
 import sys
+from celery import Celery
+
+
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -19,7 +22,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'crispy_forms',
     'school_details',
-    
+
 ]
 
 DATE_INPUT_FORMATS = ['%d-%m-%Y']
@@ -76,7 +79,7 @@ AUTH_PASSWORD_VALIDATORS = [
     
 ]
 
-
+    
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = None
 
@@ -110,3 +113,25 @@ MEDIA_ROOT=os.path.join(BASE_DIR,'media/')
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_BACKEND = 'post_office.EmailBackend'
+ACCOUNT_EMAIL_VERIFICATION = "none"
+# Email
+EMAIL_HOST='localhost'
+EMAIL_PORT=587
+EMAIL_HOST_USER= 'resilradhakrishnan@gmail.com'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_PASSWORD='nbmczqcjivugbwlr   '
+EMAIL_USE_TLS=True
+EMAIL_USE_SSL=False
+EMAIL_SUBJECT_PREFIX = '[Test mail]'
+
+
+# CELERY_BROKER_URL = "redis://redis:6379/0"
+CELERY_BROKER_URL = 'redis://localhost:6379'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Africa/Nairobi'

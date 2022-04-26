@@ -8,10 +8,18 @@ from django.contrib.auth.decorators import permission_required,user_passes_test
 from django.views.generic.list import ListView
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseForbidden
-
-
-
-
+from django.core.mail import send_mail
+from django.core.mail import EmailMessage
+from smtplib import SMTP
+import smtplib
+# from celery.decorators import task
+from school2.settings import EMAIL_HOST_USER
+from celery.utils.log import get_task_logger
+from . task import send_mail_to
+from django.http import JsonResponse
+import json
+from json import JSONEncoder
+import jsonpickle
 
 
 def register_request(request):
@@ -65,9 +73,6 @@ def student_details(request):
             # return redirect('')
 
 
-
-
-
     form = StudentForm()
     
     
@@ -109,15 +114,32 @@ def logout_user(request):
     return redirect('/')
 
 def student_data(request):
-    # import pdb;pdb.set_trace()
+    import pdb;pdb.set_trace()
     data = Mark.objects.all()
     # mark=Mark.objects.values_list('mark',flat=True)
+     
+    class Result:
+        def __init__(self, mark):
+            self._mark = mark
 
+        @property
+        def mark(self):
+            return self._mark
+    
+        @mark.setter
+        def mark(self, new_mark):
+            if new_mark >= 50:
+                print ('pass')
+            else:
+                print('fail')    
+                self._mark = new_mark
+        
 
-   
+        @mark.deleter
+        def mark(self):
+            del self._mark   
 
     return render(request,'student_data.html',{'result':data})
-
 
 
 def indi_data(request):
@@ -157,11 +179,12 @@ def complete_data(request,id):
 
 
 def edit(request,id):
+
     # import pdb;pdb.set_trace()
 
     if id != request.user.id and request.user.category != 'teacher':
         return HttpResponse('You cannot Edit the marks')
-    user=CustomUser.objects.get(id=id)
+    # user=CustomUser.objects.get(id=id)
 
     data=Mark.objects.get(id=id)
 
@@ -169,9 +192,24 @@ def edit(request,id):
     form=StudentForm(request.POST or None,instance=data)
     
     if form.is_valid():
+        # import pdb;pdb.set_trace()
+        # name = form.cleaned_data['user']
+        # email = form.cleaned_data['user.email']
+        
+
      
         form.save()
         # return redirect('/')
+        # user=CustomUser.objects.get(id=id)
+
+        message='mark updated'
+        
+        
+
+
+        send_mail_to.delay(id,message)
+
+        
 
     return render(request, 'edit.html', {'form': form})
 
