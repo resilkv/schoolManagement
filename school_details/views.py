@@ -1,5 +1,5 @@
 from django.shortcuts import  render, redirect,HttpResponse
-from .forms import NewUserForm,StudentForm,StudentDetailsForm,StudentFieldForm,TeacherForm,SingleStudentForm
+from .forms import NewUserForm,StudentForm,StudentDetailsForm,StudentFieldForm,TeacherForm,SingleStudentForm,MarkForm
 from django.contrib.auth import login,authenticate,logout
 from django.contrib import messages
 from .models import CustomUser,Mark,Grade,Student,Teacher
@@ -51,17 +51,26 @@ def check_role_user(login_user):
 @login_required(login_url=None)
 @user_passes_test(check_role_user,login_url='/')
 def student_details(request):
-    # import pdb;pdb.set_trace()
-    form=StudentForm
+    # import pdb;pdb.set_trace() 
+    user=request.user
+    teacher=user.teacher
+    teacher_grade=Grade.objects.filter(teacher=teacher)
+    grade_id=list(teacher_grade.values_list('id',flat=True))
+    student=Student.objects.filter(grade__in=grade_id)
+    student_id=list(student.values_list('user_id',flat=True))
+
+    form=StudentForm(student_id=student_id)
+    
     if request.method == 'POST':
+        # import pdb;pdb.set_trace()
          
-        form = StudentForm(request.POST)  
+        form = MarkForm(request.POST or None,request.FILES)  
         if form.is_valid():     
             student=form.save()
             return HttpResponse('Mark added')
         else:
             return HttpResponse("You already added the Mark")    
-    form = StudentForm()
+    
     
     return render(request, 'student.html', context={'student_form':form} )  
 
@@ -93,20 +102,22 @@ def logout_user(request):
 
 def student_data(request):
     
-    # import pdb;pdb.set_trace() 
+    import pdb;pdb.set_trace() 
     user=request.user
     teacher=user.teacher
     teacher_grade=Grade.objects.filter(teacher=teacher)
-    grade_id=list(teacher_grade.values_list('id',flat=True))
+    # grade_id=list(teacher_grade.values_list('id',flat=True))
+    # grade=Grade.objects.all()
 
-    student=Student.objects.filter(grade__in=grade_id)
+    student=Student.objects.filter(grade__in=teacher_grade)
     
     
 
     student_id=list(student.values_list('user_id',flat=True))
     
+    users = CustomUser.objects.filter(id__in=student_id)
     
-    data=Mark.objects.filter(id__in=student_id)
+    data=Mark.objects.filter(user__in=users)
 
     return render(request,'student_data.html',{'result':data})
 
@@ -118,7 +129,7 @@ def individualstudent_data(request):
     teacher=user.teacher
     teacher_grade=Grade.objects.filter(teacher=teacher)
     grade_id=list(teacher_grade.values_list('id',flat=True))
-    student=Student.objects.filter(grade__in=grade_id)
+    student=Student.objects.filter(grade_id__in=grade_id)
     student_id=list(student.values_list('user_id',flat=True))
 
     form=StudentDetailsForm(student_id=student_id)

@@ -61,11 +61,22 @@ class StudentForm(forms.ModelForm):
 
 
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self,student_id, *args, **kwargs):
+         
         super(StudentForm, self).__init__(*args, **kwargs)
+        self.fields['user'].queryset = Student.objects.filter(grade__in=student_id)
 
-        
-        self.fields['user'].queryset = CustomUser.objects.filter(category='student')
+
+
+
+
+class MarkForm(forms.ModelForm):
+    
+    widget = forms.TextInput(attrs={'placeholder': 'Name', 'style': 'width: 300px;', 'class': 'form-control'})
+    class Meta:
+        model = Mark
+        fields = '__all__'  
+        exclude = ('date_submit',)        
 
 
 class StudentDetailsForm(forms.ModelForm):
@@ -79,8 +90,6 @@ class StudentDetailsForm(forms.ModelForm):
     def __init__(self,student_id, *args, **kwargs):
         
         super(StudentDetailsForm, self).__init__(*args, **kwargs)
-        # import pdb;pdb.set_trace()
-
         self.fields['user'].queryset = Student.objects.filter(grade__in=student_id)
 
 

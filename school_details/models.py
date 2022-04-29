@@ -36,7 +36,7 @@ class Subject(models.Model):
 class Mark(models.Model):
 	user=models.ForeignKey('CustomUser',on_delete= models.CASCADE,related_name='user_set')
 	subject=models.ForeignKey('Subject',on_delete= models.CASCADE,related_name='name_set')
-	mark=models.IntegerField()
+	mark=models.PositiveIntegerField()
 	date_submit=models.DateTimeField(auto_now=True, editable=False)
 
 
