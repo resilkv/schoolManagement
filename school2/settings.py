@@ -117,7 +117,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 # EMAIL_BACKEND = 'post_office.EmailBackend'
 ACCOUNT_EMAIL_VERIFICATION = "none"
-# Email
+
 EMAIL_HOST='localhost'
 EMAIL_PORT=587
 EMAIL_HOST_USER= 'resilradhakrishnan@gmail.com'
@@ -128,7 +128,6 @@ EMAIL_USE_SSL=False
 EMAIL_SUBJECT_PREFIX = '[Test mail]'
 
 
-# CELERY_BROKER_URL = "redis://redis:6379/0"
 CELERY_BROKER_URL = 'redis://localhost:6379'
 CELERY_RESULT_BACKEND = 'redis://localhost:6379'
 CELERY_ACCEPT_CONTENT = ['application/json']

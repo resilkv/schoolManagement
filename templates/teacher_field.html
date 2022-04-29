@@ -10,6 +10,7 @@
 	<form class="review-form" action="" method="post">
 
 	{% csrf_token %}
+	User :{{teacher_field.user}}
 	Date of Birth : {{teacher_field.dob}}  <br><br>
 	Teaching in : {{teacher_field.grade}}  <br><br> 
 	Address{{teacher_field.address}}  <br>

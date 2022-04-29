@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin
 
-from .forms import NewUserForm,StudentForm,StudentDetailsForm,TeacherForm,StudentFieldForm
+from .forms import NewUserForm,StudentForm,StudentDetailsForm,TeacherForm,StudentFieldForm,SingleStudentForm
 from .models import CustomUser,Subject,Mark,Grade,Student,Teacher
 
 admin.site.register(CustomUser)   

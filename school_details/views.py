@@ -1,5 +1,5 @@
 from django.shortcuts import  render, redirect,HttpResponse
-from .forms import NewUserForm,StudentForm,StudentDetailsForm,StudentFieldForm,TeacherForm
+from .forms import NewUserForm,StudentForm,StudentDetailsForm,StudentFieldForm,TeacherForm,SingleStudentForm
 from django.contrib.auth import login,authenticate,logout
 from django.contrib import messages
 from .models import CustomUser,Mark,Grade,Student,Teacher
@@ -16,35 +16,24 @@ import smtplib
 from school2.settings import EMAIL_HOST_USER
 from celery.utils.log import get_task_logger
 from . task import send_mail_to
-from django.http import JsonResponse
-import json
-from json import JSONEncoder
-import jsonpickle
+
 
 
 def register_request(request):
     
     if request.method == "POST":
         form = NewUserForm(request.POST)
-        # import pdb;pdb.set_trace()
         if form.is_valid():
-
             user = form.save()
-            
             messages.success(request, "Registration successful." )
-
             if user.category=='student':
-                
                 return redirect("/Student_field")
             else:
                 return redirect('/teacher_field')   
             login(request, user)    
         messages.error(request, "Unsuccessful registration. Invalid information.")
     form = NewUserForm()
-
     return render (request=request, template_name="register.html", context={"register_form":form})
-
-
 
 def home(request):
     if request.user.is_authenticated:
@@ -53,7 +42,6 @@ def home(request):
 
 
 def check_role_user(login_user):
-    # import pdb;pdb.set_trace()   
     if login_user.is_authenticated and (login_user.category=='teacher' or login_user.is_superuser):
         return True
     else:
@@ -63,25 +51,19 @@ def check_role_user(login_user):
 @login_required(login_url=None)
 @user_passes_test(check_role_user,login_url='/')
 def student_details(request):
+    # import pdb;pdb.set_trace()
     form=StudentForm
-    # import pdb;pdb.set_trace()   
     if request.method == 'POST':
-        # import pdb;pdb.set_trace() 
+         
         form = StudentForm(request.POST)  
         if form.is_valid():     
             student=form.save()
-            # return redirect('')
-
-
+            return HttpResponse('Mark added')
+        else:
+            return HttpResponse("You already added the Mark")    
     form = StudentForm()
     
-    
-    
     return render(request, 'student.html', context={'student_form':form} )  
-
-
-
-
 
 def login_user (request):
    
@@ -92,14 +74,10 @@ def login_user (request):
         
         if user is not None:
             login(request, user)
-            # import pdb;pdb.set_trace()
-            
             if user.category=='teacher':
 
-                return redirect('/student') 
-
-                
-                                                 
+                return redirect('/student')   
+                                     
             else:
                 pk=user.id
                 return redirect('/complete_data/{}'.format(pk))    
@@ -114,67 +92,67 @@ def logout_user(request):
     return redirect('/')
 
 def student_data(request):
-    import pdb;pdb.set_trace()
-    data = Mark.objects.all()
-    # mark=Mark.objects.values_list('mark',flat=True)
-     
-    class Result:
-        def __init__(self, mark):
-            self._mark = mark
-
-        @property
-        def mark(self):
-            return self._mark
     
-        @mark.setter
-        def mark(self, new_mark):
-            if new_mark >= 50:
-                print ('pass')
-            else:
-                print('fail')    
-                self._mark = new_mark
-        
+    # import pdb;pdb.set_trace() 
+    user=request.user
+    teacher=user.teacher
+    teacher_grade=Grade.objects.filter(teacher=teacher)
+    grade_id=list(teacher_grade.values_list('id',flat=True))
 
-        @mark.deleter
-        def mark(self):
-            del self._mark   
+    student=Student.objects.filter(grade__in=grade_id)
+    
+    
+
+    student_id=list(student.values_list('user_id',flat=True))
+    
+    
+    data=Mark.objects.filter(id__in=student_id)
 
     return render(request,'student_data.html',{'result':data})
 
 
-def indi_data(request):
-    form=StudentDetailsForm
-      
+def individualstudent_data(request):
+    
+    
+    user=request.user
+    teacher=user.teacher
+    teacher_grade=Grade.objects.filter(teacher=teacher)
+    grade_id=list(teacher_grade.values_list('id',flat=True))
+    student=Student.objects.filter(grade__in=grade_id)
+    student_id=list(student.values_list('user_id',flat=True))
+
+    form=StudentDetailsForm(student_id=student_id)
+    # import pdb;pdb.set_trace()
+
+
     if request.method == 'POST':
-        form = StudentDetailsForm(request.POST or None)
-        # import pdb;pdb.set_trace()  
+        # import pdb;pdb.set_trace()    
+        form = SingleStudentForm(request.POST or None,request.FILES)
+        # student_id=request.POST['user']
+        # student=Mark.objects.filter(id=student_id)
+
         if form.is_valid():
-            # import pdb;pdb.set_trace()
-            data=form.save(commit=False)
-                   
-     
-            user= form.cleaned_data['user']
-            
-            id=user.id
-                    
+            student_id=request.POST['user']
+            # data=form.save(commit=False) 
+            # user= form.cleaned_data['user']
+            id=student_id
             return redirect('/complete_data/{}'.format(id))
-
-            
-
+           
     
-    
-    return render(request, 'indi_data.html', context={'student_details':form})        
+    return render(request, 'individualstudent_data.html', context={'student_details':form})        
 
 def complete_data(request,id):
     
     # import pdb;pdb.set_trace() 
-    user = CustomUser.objects.get(id=id)
-    data = Mark.objects.filter(user=user)
+    # user = Mark.objects.get(id=id)
+    data = Mark.objects.filter(id=id)
     if id != request.user.id and request.user.category != 'teacher':
         return HttpResponse('You cannot view what is not yours')
 
+
+
     
-    return render(request, 'complete_data.html', {'mark': data,'user':user})
+    return render(request, 'complete_data.html', {'mark': data})
 
 
 
@@ -192,24 +170,12 @@ def edit(request,id):
     form=StudentForm(request.POST or None,instance=data)
     
     if form.is_valid():
-        # import pdb;pdb.set_trace()
-        # name = form.cleaned_data['user']
-        # email = form.cleaned_data['user.email']
-        
 
-     
         form.save()
-        # return redirect('/')
-        # user=CustomUser.objects.get(id=id)
 
         message='mark updated'
-        
-        
-
 
         send_mail_to.delay(id,message)
-
-        
 
     return render(request, 'edit.html', {'form': form})
 
@@ -217,42 +183,33 @@ def edit(request,id):
 
 def Student_field(request):
 
-    form=StudentForm
+    form=StudentFieldForm
     if request.method=='POST':
-        form = StudentForm(request.POST or None)
+        form = StudentFieldForm(request.POST or None)
         if form.is_valid():
             data=form.save(commit=False)
             data.save()
             return redirect("/success")
 
         
-        form = StudentForm()
-    
-
-    
+        form = StudentFieldForm()    
     return render(request, 'student_field.html', context={'student_field':form} )    
 
 def teacher_field(request):
-    # import pdb;pdb.set_trace()
+    import pdb;pdb.set_trace()
     form=TeacherForm
-    # grade=GradeField
     if request.method=='POST':
         form = TeacherForm(request.POST or None)
         # import pdb;pdb.set_trace()
         if form.is_valid():
 
             data=form.save(commit=False)
-            # form=grade.save(commit=False)
             print('success')
             data.save()
-            # form.save()
             return redirect("/success")
 
         else:
-            print(form.errors)    
-
-        
-        
+            print(form.errors)
         form=TeacherForm()
             
     

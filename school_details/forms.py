@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from.models import Mark,Subject,Grade,Student,Teacher
 from .models import CustomUser,GRADE
 from django.forms.widgets import DateInput
-
+import requests
 
 
 
@@ -59,17 +59,13 @@ class StudentForm(forms.ModelForm):
         exclude = ('date_submit',)
         
 
+
+
     def __init__(self, *args, **kwargs):
         super(StudentForm, self).__init__(*args, **kwargs)
+
+        
         self.fields['user'].queryset = CustomUser.objects.filter(category='student')
-    
-    def __init__(self, *args, **kwargs):
-       super(StudentForm,self).__init__(*args, **kwargs)
-       attrs={'class':'form-control','required': True}
-       if self.instance and self.instance.pk:
-            self.fields.pop('user', None)
-       for field in self.fields.values():
-           field.widget.attrs = attrs
 
 
 class StudentDetailsForm(forms.ModelForm):
@@ -80,9 +76,19 @@ class StudentDetailsForm(forms.ModelForm):
         fields = ('user',)
         exclude = ('date_submit',)
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self,student_id, *args, **kwargs):
+        
         super(StudentDetailsForm, self).__init__(*args, **kwargs)
-        self.fields['user'].queryset = CustomUser.objects.filter(category='student')  
+        # import pdb;pdb.set_trace()
+
+        self.fields['user'].queryset = Student.objects.filter(grade__in=student_id)
+
+
+class SingleStudentForm(forms.ModelForm):
+    class Meta:
+        model = Mark
+        fields = ('user',)
+        exclude = ('date_submit',)          
 
 class DateInput(forms.DateInput):
     input_type = 'date'
@@ -91,7 +97,7 @@ class DateInput(forms.DateInput):
 class StudentFieldForm(forms.ModelForm):
     class Meta:
         model = Student
-        fields = '__all__'
+        fields = '__all__'        
         widgets = {
             'dob': DateInput(),
         }
@@ -102,11 +108,10 @@ class StudentFieldForm(forms.ModelForm):
 class TeacherForm(forms.ModelForm):
     
     grade = forms.MultipleChoiceField(choices=GRADE, widget=forms.CheckboxSelectMultiple)
-    # grade=forms.ModelMultipleChoiceField(choices=GRADE)
     
     class Meta:
         model = Teacher
-        fields = ('dob','address',)
+        fields = '__all__'
         widgets = {
             'dob': DateInput(),
         }

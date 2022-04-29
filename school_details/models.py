@@ -20,10 +20,8 @@ class CustomUser(AbstractUser):
 	email=models.EmailField(max_length=100,unique=True)
 	category = models.CharField(max_length=50, choices=CATEGORY_CHOICES, default='Teacher')
 
-	
-	
 
-
+	
 
 class Subject(models.Model):
 	
@@ -42,35 +40,56 @@ class Mark(models.Model):
 	date_submit=models.DateTimeField(auto_now=True, editable=False)
 
 
+	class Meta:
+    		unique_together = ('user','subject')
+    		
+
 
 	
+	
 	def __str__(self):
+
 		return self.user.__str__() 
 
+
+	@property
+	def result(self):
+		# import pdb;pdb.set_trace()
+
+		if self.mark>=50:
+			return 'pass'
+		else:
+			return 'fail'	
 
 
 		
 
 class Student(models.Model):
+	user=models.OneToOneField('CustomUser',on_delete=models.CASCADE,default=None)
 	guardian=models.CharField(max_length=50)
 	dob=models.DateField()
 	address=models.TextField(max_length=200)
-	grade=models.OneToOneField('Grade',on_delete=models.CASCADE)
-
+	grade=models.ForeignKey('Grade',on_delete=models.CASCADE,default=5)
+	
 
 	def __str__(self):
-		return self.guardian
+		return self.user.__str__()
+
+
+	
 
 
 
 
 class Teacher(models.Model):
+	user=models.OneToOneField('CustomUser',on_delete=models.CASCADE,default=None)
 	address=models.TextField(max_length=200)
-	
 	dob=models.DateField()
-
+	
 	def __str__(self):
-		return self.address	
+		return self.user.__str__()
+
+		
 
 GRADE= (
 	(5,'5'),
@@ -80,11 +99,8 @@ GRADE= (
 class Grade(models.Model):
 
 	grade=models.IntegerField(choices=GRADE,default='5')
-	# teacher=models.ManyToManyField(Teacher)
-	teacher=models.ForeignKey('Teacher',on_delete=models.CASCADE)
-	# student=models.ForeignKey('Student',on_delete=models.CASCADE)
-
-
+	teacher=models.ForeignKey('Teacher',on_delete=models.CASCADE,default=5)
+	
 	def __str__(self):
 		return self.grade.__str__()
 
