@@ -132,10 +132,14 @@ def individualstudent_data(request):
         # student=Mark.objects.filter(id=student_id)
 
         if form.is_valid():
+
             student_id=request.POST['user']
+            user=Mark.objects.get(id=student_id)
+            student=user.user
+            id=student.id
             # data=form.save(commit=False) 
             # user= form.cleaned_data['user']
-            id=student_id
+            
             return redirect('/complete_data/{}'.format(id))
            
     
@@ -144,8 +148,8 @@ def individualstudent_data(request):
 def complete_data(request,id):
     
     # import pdb;pdb.set_trace() 
-    # user = Mark.objects.get(id=id)
-    data = Mark.objects.filter(id=id)
+    user = CustomUser.objects.get(id=id)
+    data = Mark.objects.filter(user=user)
     if id != request.user.id and request.user.category != 'teacher':
         return HttpResponse('You cannot view what is not yours')
 
@@ -162,7 +166,7 @@ def edit(request,id):
 
     if id != request.user.id and request.user.category != 'teacher':
         return HttpResponse('You cannot Edit the marks')
-    # user=CustomUser.objects.get(id=id)
+    
 
     data=Mark.objects.get(id=id)
 
