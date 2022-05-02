@@ -1,6 +1,44 @@
-<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+{% load static %}
+
+
+<!DOCTYPE html>
+<html>
+
+<head>
+  <!-- Basic -->
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <!-- Mobile Metas -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <!-- Site Metas -->
+  <meta name="keywords" content="" />
+  <meta name="description" content="" />
+  <meta name="author" content="" />
+
+  <title>Registration</title>
+
+
+
+  <!-- bootstrap core css -->
+  <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}" />
+  <!-- progress barstle -->
+  <link rel="stylesheet" href="{% static 'css/css-circular-prog-bar.css' %}">
+  <!-- fonts style -->
+  <link href="https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap" rel="stylesheet">
+  <!-- font wesome stylesheet -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  <!-- Custom styles for this template -->
+  <link href="{% static 'css/style.css' %}" rel="stylesheet" />
+  <!-- responsive style -->
+  <link href="{% static 'css/responsive.css' %}" rel="stylesheet" />
+
+
+
+
+  <link rel="stylesheet" href="{% static 'css/css-circular-prog-bar.css' %}">
+
+
+</head>
 
 <html>
 <head>
@@ -23,9 +61,73 @@
 
 <form method="post" novalidate>
     {% csrf_token %} 
+
+
+    <tr>
+    <th><label for="id_username">Username:</label></th>
+    <td>
+      
+      <input type="text" name="username" maxlength="150" autofocus required id="id_username">
+      
+      
+    </td>
+  </tr>
+<br>
+  <tr>
+    <th><label for="id_email">Email:</label></th>
+    <td>
+      
+      <input type="email" name="email" required id="id_email">
+      
+      
+    </td>
+  </tr>
+<br>
+  <tr>
+    <th><label for="id_password1">Password:</label></th>
+    <td>
+      
+      <input type="password" name="password1" autocomplete="new-password" required id="id_password1">
+      
+        <br>
+        <span class="helptext"><ul><li>Your password must contain at least 8 characters.</li></ul></span>
+      
+      
+    </td>
+  </tr>
+<br>
+  <tr>
+    <th><label for="id_password2">Password confirmation:</label></th>
+    <td>
+      
+      <input type="password" name="password2" autocomplete="new-password" required id="id_password2">
+      
+        <br>
+        <span class="helptext">Enter the same password as before, for verification.</span>
+      
+      
+    </td>
+  </tr>
+<tr>
+    <th><label for="id_category">Category:</label></th>
+    <td>
+      
+      <select name="category" id="id_category">
+  <option value="teacher">Teacher</option>
+
+  <option value="student">Student</option>
+
+</select>
+      
+      
+        
+      
+    </td>
+  </tr>
+    <br>
     
 
-    {{register_form}}
+   
     <br>
     
     <button class="btn btn-success btn-sm float-right submit_btn"><i class="fas fa-arrow-alt-circle-right"></i>Register</button>

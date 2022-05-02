@@ -52,12 +52,29 @@ def check_role_user(login_user):
 @user_passes_test(check_role_user,login_url='/')
 def student_details(request):
     # import pdb;pdb.set_trace() 
+    # user=request.user
+    # teacher=user.teacher
+    # teacher_grade=Grade.objects.filter(teacher=teacher)
+    # grade_id=list(teacher_grade.values_list('id',flat=True))
+    # student=Student.objects.filter(grade__in=grade_id)
+    # student_id=list(student.values_list('user_id',flat=True))
+
+
     user=request.user
     teacher=user.teacher
     teacher_grade=Grade.objects.filter(teacher=teacher)
-    grade_id=list(teacher_grade.values_list('id',flat=True))
-    student=Student.objects.filter(grade__in=grade_id)
+    # grade_id=list(teacher_grade.values_list('id',flat=True))
+    # grade=Grade.objects.all()
+
+    student=Student.objects.filter(grade__in=teacher_grade)
+    
+    
+
     student_id=list(student.values_list('user_id',flat=True))
+    
+
+
+    
 
     form=StudentForm(student_id=student_id)
     
@@ -102,7 +119,7 @@ def logout_user(request):
 
 def student_data(request):
     
-    import pdb;pdb.set_trace() 
+    # import pdb;pdb.set_trace() 
     user=request.user
     teacher=user.teacher
     teacher_grade=Grade.objects.filter(teacher=teacher)
@@ -211,7 +228,7 @@ def Student_field(request):
     return render(request, 'student_field.html', context={'student_field':form} )    
 
 def teacher_field(request):
-    import pdb;pdb.set_trace()
+    # import pdb;pdb.set_trace()
     form=TeacherForm
     if request.method=='POST':
         form = TeacherForm(request.POST or None)

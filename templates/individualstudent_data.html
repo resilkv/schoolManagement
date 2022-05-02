@@ -1,44 +1,73 @@
 
+<!DOCTYPE html>
+
+
 <html>
+
+
+{% load static %}
+
 <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title></title>
+  <!-- Basic -->
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <!-- Mobile Metas -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <!-- Site Metas -->
+  <meta name="keywords" content="" />
+  <meta name="description" content="" />
+  <meta name="author" content="" />
+
+  <title>Individual Student Marks</title>
+   <ul class="nav navbar-nav my-2 my-lg-0">
+<li class="nav-item"><a class="nav-link" href="/student/logout"><i class="fas fa-user"></i> Logout</a></li>
+
+
+
+  <!-- bootstrap core css -->
+  <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}" />
+  <!-- progress barstle -->
+  <link rel="stylesheet" href="{% static 'css/css-circular-prog-bar.css' %}">
+  <!-- fonts style -->
+  <link href="https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap" rel="stylesheet">
+  <!-- font wesome stylesheet -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  <!-- Custom styles for this template -->
+  <link href="{% static 'css/style.css' %}" rel="stylesheet" />
+  <!-- responsive style -->
+  <link href="{% static 'css/responsive.css' %}" rel="stylesheet" />
+
+
+
+
+  <link rel="stylesheet" href="{% static 'css/css-circular-prog-bar.css' %}">
+
+
 </head>
+
 <body>
-<html>
-{% block body %}
-<style>
-body {
-     display: flex;
-     align-items: center;
-     justify-content: center;
-     margin: 0 auto;
-     height: 100vh; 
-     background-color: #f1f1f1;
-   }
+  <div class="top_container sub_pages ">
+  <!-- contact section -->
 
-input {
-     display: flex;
-     align-items: center;
-     justify-content: center;
-     margin: 0 auto;
-   }
+  <section class="contact_section layout_padding">
+    <div class="container">
 
-label {
-     display: flex;
-     align-items: center;
-     justify-content: center;
-     margin: 0 auto;
-   }
+      <h2 class="main-heading">
+        Select the Student
 
-select {
-     margin-bottom: 10px;
-     margin-top: 10px;
-   }
+      </h2>
+      <p class="text-center">
+        Teacher can access mark of Individual Student here..!
 
-</style>
-<form role="form" action="#" method="post" >
+      </p>
+    <form role="form" action="#" method="post" >
+      <div class="">
+        <div class="contact_section-container">
+          <div class="row">
+            <div class="col-md-6 mx-auto">
+              
+                <form action="">
+                  <div>
     {% csrf_token %} 
 
     
@@ -76,7 +105,11 @@ select {
 
 
   </form>
-{% endblock %}
-</body>
-</html>
+ <script type="text/javascript" src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/bootstrap.js' %}"></script>
+  <!-- progreesbar script -->
 
+  
+</body>
+
+</html>

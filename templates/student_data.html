@@ -1,61 +1,48 @@
+
 <!DOCTYPE >
 <html>
+{% load static %}
+
+
+
 <head>
-<style>
-body {
-  background-color: lightyellow;
-}
+  <ul class="nav navbar-nav my-2 my-lg-0">
+<li class="nav-item"><a class="nav-link" href="/student/logout"><i class="fas fa-user"></i> Logout</a></li>
+  <!-- Basic -->
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <!-- Mobile Metas -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <!-- Site Metas -->
+  <meta name="keywords" content="" />
+  <meta name="description" content="" />
+  <meta name="author" content="" />
 
-h1 {
-  color: black;
-  text-align: center;
-}
+  <title>All student's Marks</title>
 
-p {
-  font-family: verdana;
-  font-size: 20px;
-}
-</style>
+
+
+  <!-- bootstrap core css -->
+  <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}" />
+  <!-- progress barstle -->
+  <link rel="stylesheet" href="{% static 'css/css-circular-prog-bar.css' %}">
+  <!-- fonts style -->
+  <link href="https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap" rel="stylesheet">
+  <!-- font wesome stylesheet -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  <!-- Custom styles for this template -->
+  <link href="{% static 'css/style.css' %}" rel="stylesheet" />
+  <!-- responsive style -->
+  <link href="{% static 'css/responsive.css' %}" rel="stylesheet" />
+
+{% block content %}
+
+
+  <link rel="stylesheet" href="{% static 'css/css-circular-prog-bar.css' %}">
+
+
 </head>
-<h1> STUDENT'S MARK LIST</h1>
-<body>
-<body>
-{% block body %}
 
-<table><head>
-<style>
-body {
-  background-color: lightyellow;
-}
-
-h1 {
-  color: white;
-  text-align: center;
-}
-
-p {
-  font-family: verdana;
-  font-size: 20px;
-}
-</style>
-</head>
-<body><head>
-<style>
-body {
-  background-color: lightyellow;
-}
-
-h1 {
-  color: black;
-  text-align: center;
-}
-
-p {
-  font-family: verdana;
-  font-size: 20px;
-}
-</style>
-</head>
 
 <table class="table table-striped table-dark">
   <thead>
